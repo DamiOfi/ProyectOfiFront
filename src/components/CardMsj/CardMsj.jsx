@@ -1,20 +1,20 @@
 import React from "react";
+import Swal from 'sweetalert2'
 
 const CardMsj = ({ num, mensaje, name, surname, id }) => {
-  
+
   const handleMensajeDirecto = () => {
-    const numero = num.replace(/\D/g, ""); // Elimina caracteres no numéricos
-    const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`;
+    // Suponiendo que num ya está en el formato correcto (1123456789)
+    const url = `https://wa.me/54${num}?text=${encodeURIComponent(mensaje)}`;
     window.open(url, "_blank");
   };
 
   const handleCopyNumero = () => {
-    const numero = num.replace(/\D/g, ""); // Elimina caracteres no numéricos
+    // Convierte num a cadena
+    const numero = String(num).trim(); // Convierte a string y elimina espacios
   
-    if (numero.length >= 12) {
-      const numeroSinCodigo = numero.slice(2); // Elimina el +54
-  
-      navigator.clipboard.writeText(numeroSinCodigo)
+    if (numero.length === 10) { // Verifica que el número tenga 10 dígitos
+      navigator.clipboard.writeText(numero)
         .then(() => {
           alert("Número copiado al portapapeles!");
         })
@@ -24,8 +24,7 @@ const CardMsj = ({ num, mensaje, name, surname, id }) => {
     } else {
       alert("Número no válido.");
     }
-  };
-  
+  };  
 
   const handleCopyMensaje = () => {
     navigator.clipboard.writeText(mensaje)
