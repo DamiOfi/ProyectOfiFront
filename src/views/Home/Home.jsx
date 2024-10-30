@@ -4,7 +4,7 @@ import Messages from '../Messages/Messages';
 const Home = () => {
 
   return (
-    <ContainerHome className=''>
+    <ContainerHome className='w-full'>
       <Messages></Messages>
     </ContainerHome>
   );

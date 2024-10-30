@@ -11,10 +11,8 @@ const CardMsj = ({ num, mensaje, name, surname, id }) => {
   const handleCopyNumero = () => {
     const numero = num.replace(/\D/g, ""); // Elimina caracteres no numéricos
   
-    // Verifica que el número tenga al menos 13 dígitos para poder extraer desde el 11
     if (numero.length >= 12) {
       const numeroSinCodigo = numero.slice(2); // Elimina el +54
-      /* const numeroFinal = numeroSinCodigo.slice(0, 11); */ // Obtiene los primeros 11 dígitos
   
       navigator.clipboard.writeText(numeroSinCodigo)
         .then(() => {

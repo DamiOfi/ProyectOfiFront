@@ -23,10 +23,10 @@ const Messages = () => {
 
   return (
     <ContainerMessages className='flex flex-col p-10'>
-      <div className='text-4xl'>
+      <div className='text-4xl text-[#bc6c25]'>
         <h1>Clientes vencidos</h1>
       </div>
-      <div className='text-2xl text-zinc-500 w-full h-auto my-12 flex justify-start'>
+      <div className='text-2xl text-[#dda15e] w-full h-auto my-12 flex justify-start'>
         <h2>Vencen el día de hoy</h2>
       </div>
       <div className='flex flex-wrap gap-4'>
@@ -42,10 +42,10 @@ const Messages = () => {
             />
           ))
         ) : (
-          <p>No hay clientes vencidos hoy.</p>
+          <p className='text-[#dda15e] text-2xl'>No hay clientes vencidos hoy.</p>
         )}
       </div>
-      <div className='text-2xl text-zinc-500 w-full h-auto my-12 flex justify-start'>
+      <div className='text-2xl text-[#dda15e] w-full h-auto my-12 flex justify-start'>
         <h2>Vencen en tres días</h2>
       </div>
       <div className='flex flex-wrap gap-4'>
@@ -61,7 +61,7 @@ const Messages = () => {
             />
           ))
         ) : (
-          <p>No hay clientes que venzan en tres días.</p>
+          <p className='text-2xl text-[#dda15e]'>No hay clientes que venzan en tres días.</p>
         )}
       </div>
     </ContainerMessages>
