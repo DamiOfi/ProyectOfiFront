@@ -42,7 +42,9 @@ const Messages = () => {
             />
           ))
         ) : (
-          <p className='text-[#dda15e] text-2xl'>No hay clientes vencidos hoy.</p>
+          <div className='w-full flex items-center justify-center'>
+            <p className='text-[#c1121f] text-2xl'>No hay clientes vencidos hoy.</p>
+          </div>
         )}
       </div>
       <div className='text-2xl text-[#dda15e] w-full h-auto my-12 flex justify-start'>
@@ -61,7 +63,9 @@ const Messages = () => {
             />
           ))
         ) : (
-          <p className='text-2xl text-[#dda15e]'>No hay clientes que venzan en tres días.</p>
+          <div className='w-full flex items-center justify-center'>
+            <p className='text-[#c1121f] text-2xl'>No hay clientes que venzan en tres días.</p>
+          </div>
         )}
       </div>
     </ContainerMessages>

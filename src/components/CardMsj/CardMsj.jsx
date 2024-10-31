@@ -1,5 +1,6 @@
 import React from "react";
-import Swal from 'sweetalert2'
+import { notiToast } from "../NotiToast/NotiToast";
+import BtnPushNumber from "../BtnPushNumber/BtnPushNumber";
 
 const CardMsj = ({ num, mensaje, name, surname, id }) => {
 
@@ -16,20 +17,20 @@ const CardMsj = ({ num, mensaje, name, surname, id }) => {
     if (numero.length === 10) { // Verifica que el número tenga 10 dígitos
       navigator.clipboard.writeText(numero)
         .then(() => {
-          alert("Número copiado al portapapeles!");
+          notiToast("success","Número copiado!");
         })
         .catch(err => {
           console.error("Error al copiar el número: ", err);
         });
     } else {
-      alert("Número no válido.");
+      notiToast("error","Número no válido.");
     }
   };  
 
   const handleCopyMensaje = () => {
     navigator.clipboard.writeText(mensaje)
       .then(() => {
-        alert("Mensaje copiado al portapapeles!");
+        notiToast("success","Mensaje copiado!");
       })
       .catch(err => {
         console.error("Error al copiar el mensaje: ", err);
@@ -50,11 +51,15 @@ const CardMsj = ({ num, mensaje, name, surname, id }) => {
           </p>
         </div>
 
-        <div className="h-10 flex items-center truncate justify-center px-1">
-          <p className="font-semibold truncate text-left mr-auto text-zinc-700 sm:text-sm text-xs">
-            {num}
-          </p>
-        </div>
+        {
+          num==null? <BtnPushNumber></BtnPushNumber> 
+          : 
+          <div className="h-10 flex items-center truncate justify-center px-1">
+            <p className="font-semibold truncate text-left mr-auto text-zinc-700 sm:text-sm text-xs">
+              {num}
+            </p>
+          </div>
+        }
 
         <div className="flex items-center justify-between gap-x-1">
           <button
