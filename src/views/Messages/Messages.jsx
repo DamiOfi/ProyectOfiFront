@@ -4,13 +4,22 @@ import axios from 'axios';
 import CardMsj from '../../components/CardMsj/CardMsj';
 import CardSkeletonExpired from '../../components/CardSkeletonExpired/CardSkeletonExpired';
 
+// Función para formatear fechas en el formato dd/mm/aaaa
+const formatFecha = (fecha) => {
+  const date = new Date(fecha);
+  const dia = String(date.getDate()).padStart(2, '0');
+  const mes = String(date.getMonth() + 1).padStart(2, '0'); // Los meses comienzan desde 0
+  const anio = date.getFullYear();
+  return `${dia}/${mes}/${anio}`;
+};
+
 const Messages = () => {
   const [clientes, setClientes] = useState([]);
   const [loading, setLoading] = useState(true); // Estado de loading
 
   useEffect(() => {
     // Hacer la solicitud al servidor para obtener los clientes asegurados
-    axios.get('http://localhost:3000/clientes-vencidos')
+    axios.get('http://localhost:3001/clientes-vencidos')
       .then(response => {
         setClientes(response.data); // Asignar los datos obtenidos al estado
       })
@@ -23,12 +32,13 @@ const Messages = () => {
   }, []);
 
   // Filtrar clientes vencidos y no vencidos
-  const vencidosHoy = clientes.filter(cliente => cliente.defeated === true);
-  const vencenEnTresDias = clientes.filter(cliente => cliente.defeated === false);
-
+  const vencidosHoy = clientes.filter(cliente => cliente.vencido === true);
+  const vencenEnTresDias = clientes.filter(cliente => cliente.vencido === false);
+  let auxIdToday = 0;
+  let auxId = 0;
+  
   return (
     <ContainerMessages className='flex flex-col p-10'>
-      {/* <CardSkeletonExpired></CardSkeletonExpired> */}
       <div className='text-4xl text-[#bc6c25]'>
         <h1>Clientes vencidos</h1>
       </div>
@@ -46,17 +56,17 @@ const Messages = () => {
             {vencidosHoy.length > 0 ? (
               vencidosHoy.map(cliente => (
                 <CardMsj 
-                  name={cliente.name} 
-                  surname={cliente.surname} 
-                  num={cliente.telefono} 
+                  nombre={cliente.nombre} 
+                  apellido={cliente.apellido} 
+                  telefono={cliente.telefono} 
                   mensaje={cliente.mensaje} 
                   key={cliente.id} 
-                  id={cliente.id}
-                  company={cliente.company}
-                  patent={cliente.patent}
-                  share={cliente.share}
-                  coverage={cliente.coverage}
-                  lastPayment={cliente.lastPayment}
+                  id={++auxIdToday}
+                  compania={cliente.compania}
+                  patente={cliente.patente}
+                  cuota={cliente.cuota}
+                  cobertura={cliente.cobertura}
+                  ultimoPago={formatFecha(cliente.ultimo_pago)} // Formatear fecha aquí
                 />
               ))
             ) : (
@@ -73,17 +83,17 @@ const Messages = () => {
             {vencenEnTresDias.length > 0 ? (
               vencenEnTresDias.map(cliente => (
                 <CardMsj 
-                  name={cliente.name} 
-                  surname={cliente.surname} 
-                  num={cliente.telefono} 
+                  nombre={cliente.nombre} 
+                  apellido={cliente.apellido} 
+                  telefono={cliente.telefono} 
                   mensaje={cliente.mensaje} 
                   key={cliente.id} 
-                  id={cliente.id}
-                  company={cliente.company}
-                  patent={cliente.patent}
-                  share={cliente.share}
-                  coverage={cliente.coverage}
-                  lastPayment={cliente.lastPayment}
+                  id={++auxId}
+                  compania={cliente.compania}
+                  patente={cliente.patente}
+                  cuota={cliente.cuota}
+                  cobertura={cliente.cobertura}
+                  ultimoPago={formatFecha(cliente.ultimo_pago)} // Formatear fecha aquí
                 />
               ))
             ) : (
@@ -92,10 +102,12 @@ const Messages = () => {
               </div>
             )}
           </div>
+          <div className='text-zinc-600 w-full flex items-center justify-end text-xs m-2 px-4'>Total: {auxId + auxIdToday}</div>
         </>
       )}
     </ContainerMessages>
   );
-}
+};
 
 export default Messages;
+

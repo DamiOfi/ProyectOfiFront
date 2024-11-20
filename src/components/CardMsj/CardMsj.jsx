@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { notiToast } from "../NotiToast/NotiToast";
 import BtnPushNumber from "../BtnPushNumber/BtnPushNumber";
 
-const CardMsj = ({ num, mensaje, name, surname, id, company, patent, share, coverage, lastPayment }) => {
+const CardMsj = ({ telefono, mensaje, nombre, apellido, id, compania, patente, cuota, cobertura, ultimoPago }) => {
   const [showDetails, setShowDetails] = useState(false);
 
   const handleToggleDetails = () => {
@@ -10,30 +10,30 @@ const CardMsj = ({ num, mensaje, name, surname, id, company, patent, share, cove
   };
 
   const handleMensajeDirecto = () => {
-    const url = `https://wa.me/54${num}?text=${encodeURIComponent(mensaje)}`;
+    const url = `https://wa.me/54${telefono}?text=${encodeURIComponent(mensaje)}`;
     window.open(url, "_blank");
   };
 
   const handleCopyNumero = () => {
-    const numero = String(num).trim();
+    const numero = String(telefono).trim();
 
     if (numero.length === 10) {
       navigator.clipboard.writeText(numero)
         .then(() => {
-          notiToast("success","Número copiado!");
+          notiToast("success", "Número copiado!");
         })
         .catch(err => {
           console.error("Error al copiar el número: ", err);
         });
     } else {
-      notiToast("error","Número no válido.");
+      notiToast("error", "Número no válido.");
     }
   };
 
   const handleCopyMensaje = () => {
     navigator.clipboard.writeText(mensaje)
       .then(() => {
-        notiToast("success","Mensaje copiado!");
+        notiToast("success", "Mensaje copiado!");
       })
       .catch(err => {
         console.error("Error al copiar el mensaje: ", err);
@@ -53,14 +53,14 @@ const CardMsj = ({ num, mensaje, name, surname, id, company, patent, share, cove
           onClick={handleToggleDetails}
         >
           <p className="truncate sm:text-sm text-xs font-medium transition-all">
-            {surname} {name}
+            {apellido} {nombre}
           </p>
         </div>
 
-        {num == null ? <BtnPushNumber /> : 
+        {telefono == null ? <BtnPushNumber /> : 
         <div className="h-10 flex items-center truncate justify-center px-1">
           <p className="font-semibold truncate text-left mr-auto text-zinc-700 sm:text-sm text-xs transition-all">
-            {num}
+            {telefono}
           </p>
         </div>}
 
@@ -89,22 +89,22 @@ const CardMsj = ({ num, mensaje, name, surname, id, company, patent, share, cove
       </div>
 
       <div 
-        className={`flex items-center justify-between gap-2 flex-wrap sm:text-sm text-xs mt-2 p-2 bg-gray-100 rounded transition-all duration-300 ${showDetails ? "max-h-40 opacity-100" : "max-h-0 opacity-0 overflow-hidden p-0 mt-0"}`}
+        className={`flex items-center justify-between gap-2 flex-wrap sm:text-sm text-xs  bg-gray-100 rounded transition-all duration-300 ${showDetails ? "max-h-40 opacity-100 mt-2 p-2" : "max-h-0 opacity-0 overflow-hidden p-0 mt-0"}`}
       >
         <div className="flex items-center justify-center bg-white px-2 py-1 rounded">
-          <p>Compañia: {company}</p>
+          <p>Compañia: {compania}</p>
         </div>
         <div className="flex items-center justify-center bg-white px-2 py-1 rounded">
-          <p>Patente: {patent}</p>
+          <p>Patente: {patente}</p>
         </div>
         <div className="flex items-center justify-center bg-white px-2 py-1 rounded">
-          <p>Cuota: {share}</p>
+          <p>Cuota: {cuota}</p>
         </div>
         <div className="flex items-center justify-center bg-white px-2 py-1 rounded">
-          <p>Cobertura: {coverage}</p>
+          <p>Cobertura: {cobertura}</p>
         </div>
         <div className="flex items-center justify-center bg-white px-2 py-1 rounded">
-          <p>Ult. Pago: {lastPayment}</p>
+          <p>Ult. Pago: {ultimoPago}</p>
         </div>
       </div>
     </div>
