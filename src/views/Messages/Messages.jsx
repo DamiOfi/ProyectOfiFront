@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchClientesVencidos } from '../../features/clientesVencidosSlice';
 import { ContainerMessages } from './messages.styled';
-import axios from 'axios';
 import CardMsj from '../../components/CardMsj/CardMsj';
-import CardSkeletonExpired from '../../components/CardSkeletonExpired/CardSkeletonExpired';
 
 // Función para formatear fechas en el formato dd/mm/aaaa
 const formatFecha = (fecha) => {
@@ -14,95 +14,96 @@ const formatFecha = (fecha) => {
 };
 
 const Messages = () => {
-  const [clientes, setClientes] = useState([]);
-  const [loading, setLoading] = useState(true); // Estado de loading
+  const dispatch = useDispatch();
+  const { data: clientes, status, error } = useSelector((state) => state.clientesVencidos);
 
+  // Cargar los datos al montar el componente
   useEffect(() => {
-    // Hacer la solicitud al servidor para obtener los clientes asegurados
-    axios.get('http://localhost:3001/clientes-vencidos')
-      .then(response => {
-        setClientes(response.data); // Asignar los datos obtenidos al estado
-      })
-      .catch(error => {
-        console.error('Error al obtener los clientes:', error);
-      })
-      .finally(() => {
-        setLoading(false); // Desactivar loading al finalizar la solicitud
-      });
-  }, []);
+    if (status === 'idle') {
+      dispatch(fetchClientesVencidos());
+    }
+  }, [dispatch, status]);
 
   // Filtrar clientes vencidos y no vencidos
-  const vencidosHoy = clientes.filter(cliente => cliente.vencido === true);
-  const vencenEnTresDias = clientes.filter(cliente => cliente.vencido === false);
+  const vencidosHoy = clientes.filter(cliente => cliente.vencido_hoy === true);
+  const vencenEnTresDias = clientes.filter(cliente => cliente.vencido_hoy === false);
   let auxIdToday = 0;
   let auxId = 0;
-  
+
   return (
-    <ContainerMessages className='flex flex-col p-10'>
-      <div className='text-4xl text-[#bc6c25]'>
+    <ContainerMessages className="flex flex-col p-10">
+      <div className="text-4xl text-[#bc6c25]">
         <h1>Clientes vencidos</h1>
       </div>
 
-      {loading ? ( // Condicional para mostrar el loading
-        <div className='w-full flex items-center justify-center'>
-          <p className='text-[#c1121f] text-2xl'>Cargando...</p>
+      {status === 'loading' && (
+        <div className="w-full flex items-center justify-center">
+          <p className="text-[#c1121f] text-2xl">Cargando clientes...</p>
         </div>
-      ) : (
+      )}
+      {status === 'failed' && (
+        <div className="w-full flex items-center justify-center">
+          <p className="text-[#c1121f] text-2xl">Error: {error}</p>
+        </div>
+      )}
+      {status === 'succeeded' && (
         <>
-          <div className='text-2xl text-[#dda15e] w-full h-auto my-12 flex justify-start'>
+          <div className="text-2xl text-[#dda15e] w-full h-auto my-12 flex justify-start">
             <h2>Vencen el día de hoy</h2>
           </div>
-          <div className='flex flex-wrap gap-4'>
+          <div className="flex flex-wrap gap-4">
             {vencidosHoy.length > 0 ? (
-              vencidosHoy.map(cliente => (
-                <CardMsj 
-                  nombre={cliente.nombre} 
-                  apellido={cliente.apellido} 
-                  telefono={cliente.telefono} 
-                  mensaje={cliente.mensaje} 
-                  key={cliente.id} 
+              vencidosHoy.map((cliente) => (
+                <CardMsj
+                  nombre={cliente.nombre}
+                  apellido={cliente.apellido}
+                  telefono={cliente.telefono}
+                  mensaje={cliente.mensaje}
+                  key={cliente.id_cliente}
                   id={++auxIdToday}
                   compania={cliente.compania}
                   patente={cliente.patente}
                   cuota={cliente.cuota}
                   cobertura={cliente.cobertura}
-                  ultimoPago={formatFecha(cliente.ultimo_pago)} // Formatear fecha aquí
+                  ultimoPago={formatFecha(cliente.ultimo_pago)}
                 />
               ))
             ) : (
-              <div className='w-full flex items-center justify-center'>
-                <p className='text-[#c1121f] text-2xl'>No hay clientes vencidos hoy.</p>
+              <div className="w-full flex items-center justify-center">
+                <p className="text-[#c1121f] text-2xl">No hay clientes vencidos hoy.</p>
               </div>
             )}
           </div>
 
-          <div className='text-2xl text-[#dda15e] w-full h-auto my-12 flex justify-start'>
+          <div className="text-2xl text-[#dda15e] w-full h-auto my-12 flex justify-start">
             <h2>Vencen en tres días</h2>
           </div>
-          <div className='flex flex-wrap gap-4'>
+          <div className="flex flex-wrap gap-4">
             {vencenEnTresDias.length > 0 ? (
-              vencenEnTresDias.map(cliente => (
-                <CardMsj 
-                  nombre={cliente.nombre} 
-                  apellido={cliente.apellido} 
-                  telefono={cliente.telefono} 
-                  mensaje={cliente.mensaje} 
-                  key={cliente.id} 
+              vencenEnTresDias.map((cliente) => (
+                <CardMsj
+                  nombre={cliente.nombre}
+                  apellido={cliente.apellido}
+                  telefono={cliente.telefono}
+                  mensaje={cliente.mensaje}
+                  key={cliente.id_cliente}
                   id={++auxId}
                   compania={cliente.compania}
                   patente={cliente.patente}
                   cuota={cliente.cuota}
                   cobertura={cliente.cobertura}
-                  ultimoPago={formatFecha(cliente.ultimo_pago)} // Formatear fecha aquí
+                  ultimoPago={formatFecha(cliente.ultimo_pago)}
                 />
               ))
             ) : (
-              <div className='w-full flex items-center justify-center'>
-                <p className='text-[#c1121f] text-2xl'>No hay clientes que venzan en tres días.</p>
+              <div className="w-full flex items-center justify-center">
+                <p className="text-[#c1121f] text-2xl">No hay clientes que venzan en tres días.</p>
               </div>
             )}
           </div>
-          <div className='text-zinc-600 w-full flex items-center justify-end text-xs m-2 px-4'>Total: {auxId + auxIdToday}</div>
+          <div className="text-zinc-600 w-full flex items-center justify-end text-xs m-2 px-4">
+            Total: {auxId + auxIdToday}
+          </div>
         </>
       )}
     </ContainerMessages>
@@ -110,4 +111,3 @@ const Messages = () => {
 };
 
 export default Messages;
-

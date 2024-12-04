@@ -1,10 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
-import clientesVencidosReducer from './slices/clientesVencidosSlice';
+import clientesVencidosReducer from '../features/clientesVencidosSlice';
 
-const store = configureStore({
+export const store = configureStore({
   reducer: {
     clientesVencidos: clientesVencidosReducer,
   },
 });
-
-export default store;
