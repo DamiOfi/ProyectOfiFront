@@ -9,4 +9,4 @@ const Insured = () => {
   )
 }
 
-export default Insured
+export default Insured;
