@@ -18,7 +18,7 @@ const MainForm = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100 py-5">
+    <div className="flex justify-center items-center min-h-screen bg-gray-100">
       {step === 1 && (
         <motion.div
           initial={{ opacity: 0, x: -200 }}
