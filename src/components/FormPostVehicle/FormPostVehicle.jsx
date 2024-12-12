@@ -5,16 +5,22 @@ import { notiToast } from "../../components/NotiToast/NotiToast";
 
 const FormPostVehicle = ({ clientId }) => {
   const navigate = useNavigate();
+  const getDefaultExpirationDate = () => {
+    const today = new Date();
+    today.setMonth(today.getMonth() + 1);
+    return today.toISOString().split("T")[0];
+  };
+
   const [vehicleData, setVehicleData] = useState({
     clientId,
     tipo: "",
     patente: "",
     compañia: "",
-    cuota: "",
+    cuota: "1",
     cobertura: "",
-    ultimo_pago: "",
-    fecha_vencimiento: "",
-    primer_pago: "",
+    ultimo_pago: new Date().toISOString().split("T")[0],
+    fecha_vencimiento: getDefaultExpirationDate(),
+    primer_pago: new Date().toISOString().split("T")[0],
     marca: "",
     modelo: "",
     año: "",
@@ -62,7 +68,22 @@ const FormPostVehicle = ({ clientId }) => {
       <div className="container w-full h-auto flex justify-between items-center gap-y-10 flex-col">
       <div className=""><h2>Informacion del vehiculo</h2></div>
         <div className="vehiculo w-full h-auto flex justify-center items-center gap-x-6 flex-col sm:flex-row">
-          <div className="flex flex-wrap gap-4 justify-between items-center">
+          <div className="flex flex-wrap gap-x-4 gap-y-8 justify-center items-center min-[476px]:justify-between">
+          <div className="flex-grow-1 basis-48">
+              <label className="block text-gray-700 text-sm font-bold mb-2">Tipo</label>
+              <select
+                name="tipo"
+                value={vehicleData.tipo}
+                onChange={handleChange}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                required
+              >
+                <option value="">Seleccione</option>
+                <option value="AUTO">AUTO</option>
+                <option value="MOTO">MOTO</option>
+                <option value="CAMIONETA">CAMIONETA</option>
+              </select>
+            </div>
             <div className="flex-grow-1 basis-48">
               <label className="block text-gray-700 text-sm font-bold mb-2">Patente</label>
               <input
@@ -73,6 +94,21 @@ const FormPostVehicle = ({ clientId }) => {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 required
               />
+            </div>
+            <div className="flex-grow-1 basis-48">
+              <label className="block text-gray-700 text-sm font-bold mb-2">Marca</label>
+              <select
+                name="marca"
+                value={vehicleData.marca}
+                onChange={handleChange}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                required
+              >
+                <option value="">Seleccione</option>
+                <option value="TOYOTA">TOYOTA</option>
+                <option value="FORD">FORD</option>
+                <option value="CHEVROLET">CHEVROLET</option>
+              </select>
             </div>
             <div className="flex-grow-1 basis-48">
               <label className="block text-gray-700 text-sm font-bold mb-2">Modelo</label>
@@ -86,31 +122,9 @@ const FormPostVehicle = ({ clientId }) => {
               />
             </div>
             <div className="flex-grow-1 basis-48">
-              <label className="block text-gray-700 text-sm font-bold mb-2">Tipo</label>
-              <input
-                type="text"
-                name="tipo"
-                value={vehicleData.tipo}
-                onChange={handleChange}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                required
-              />
-            </div>
-            <div className="flex-grow-1 basis-48">
-              <label className="block text-gray-700 text-sm font-bold mb-2">Marca</label>
-              <input
-                type="text"
-                name="marca"
-                value={vehicleData.marca}
-                onChange={handleChange}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                required
-              />
-            </div>
-            <div className="flex-grow-1 basis-48">
               <label className="block text-gray-700 text-sm font-bold mb-2">Año</label>
               <input
-                type="number"
+                type="text"
                 name="año"
                 value={vehicleData.año}
                 onChange={handleChange}
@@ -122,17 +136,36 @@ const FormPostVehicle = ({ clientId }) => {
         </div>
         <div className=""><h2>Informacion del seguro</h2></div>
         <div className="cliente w-full h-auto flex justify-center items-center gap-x-6 flex-col sm:flex-row">
-          <div className="flex flex-wrap gap-4 justify-between items-center">
+          <div className="flex flex-wrap gap-x-4 gap-y-8 justify-center items-center min-[476px]:justify-between">
+          <div className="flex-grow-1 basis-48">
+              <label className="block text-gray-700 text-sm font-bold mb-2">Compañía</label>
+              <select
+                name="compañia"
+                value={vehicleData.compañia}
+                onChange={handleChange}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                required
+              >
+                <option value="">Seleccione</option>
+                <option value="ALLIANZ">ALLIANZ</option>
+                <option value="MAPFRE">MAPFRE</option>
+                <option value="SURA">SURA</option>
+              </select>
+            </div>
             <div className="flex-grow-1 basis-48">
-          <label className="block text-gray-700 text-sm font-bold mb-2">Compañía</label>
-          <input
-            type="text"
-            name="compañia"
-            value={vehicleData.compañia}
-            onChange={handleChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            required
-          />
+              <label className="block text-gray-700 text-sm font-bold mb-2">Cobertura</label>
+              <select
+                name="cobertura"
+                value={vehicleData.cobertura}
+                onChange={handleChange}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                required
+              >
+                <option value="">Seleccione</option>
+                <option value="TOTAL">TOTAL</option>
+                <option value="PARCIAL">PARCIAL</option>
+                <option value="BASICA">BASICA</option>
+              </select>
             </div>
             <div className="flex-grow-1 basis-48">
               <label className="block text-gray-700 text-sm font-bold mb-2">Cuota</label>
@@ -143,14 +176,26 @@ const FormPostVehicle = ({ clientId }) => {
                 onChange={handleChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 required
+                min="1"
               />
             </div>
             <div className="flex-grow-1 basis-48">
-              <label className="block text-gray-700 text-sm font-bold mb-2">Cobertura</label>
+              <label className="block text-gray-700 text-sm font-bold mb-2">Primer Pago</label>
               <input
-                type="text"
-                name="cobertura"
-                value={vehicleData.cobertura}
+                type="date"
+                name="primer_pago"
+                value={vehicleData.primer_pago}
+                onChange={handleChange}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                required
+              />
+            </div>
+            <div className="flex-grow-1 basis-48">
+              <label className="block text-gray-700 text-sm font-bold mb-2">Último Pago</label>
+              <input
+                type="date"
+                name="ultimo_pago"
+                value={vehicleData.ultimo_pago}
                 onChange={handleChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 required
@@ -168,20 +213,9 @@ const FormPostVehicle = ({ clientId }) => {
               />
             </div>
             <div className="flex-grow-1 basis-48">
-              <label className="block text-gray-700 text-sm font-bold mb-2">Primer Pago</label>
-              <input
-                type="date"
-                name="primer_pago"
-                value={vehicleData.primer_pago}
-                onChange={handleChange}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                required
-              />
-            </div>
-            <div className="flex-grow-1 basis-48">
               <label className="block text-gray-700 text-sm font-bold mb-2">Precio Real</label>
               <input
-                type="number"
+                type="text"
                 name="precio_real"
                 value={vehicleData.precio_real}
                 onChange={handleChange}
@@ -192,7 +226,7 @@ const FormPostVehicle = ({ clientId }) => {
             <div className="flex-grow-1 basis-48">
               <label className="block text-gray-700 text-sm font-bold mb-2">Precio Agencia</label>
               <input
-                type="number"
+                type="text"
                 name="precio_agencia"
                 value={vehicleData.precio_agencia}
                 onChange={handleChange}
@@ -210,17 +244,6 @@ const FormPostVehicle = ({ clientId }) => {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 required
               />
-            </div>
-            <div className="flex-grow-1 basis-48">
-        <label className="block text-gray-700 text-sm font-bold mb-2">Último Pago</label>
-        <input
-          type="date"
-          name="ultimo_pago"
-          value={vehicleData.ultimo_pago}
-          onChange={handleChange}
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          required
-        />
             </div>
           </div>
         </div>
