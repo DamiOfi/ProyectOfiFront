@@ -24,8 +24,8 @@ const FormPostVehicle = ({ clientId }) => {
     marca: "",
     modelo: "",
     año: "",
-    precio_real: "",
-    precio_agencia: "",
+    precio_real: "15000",
+    precio_agencia: "10000",
     local: "",
   });
 
@@ -41,7 +41,7 @@ const FormPostVehicle = ({ clientId }) => {
     const { name, value } = e.target;
     setVehicleData({
       ...vehicleData,
-      [name]: value,
+      [name]: name === "modelo" ? value.toUpperCase() : value,
     });
   };
 
@@ -66,7 +66,11 @@ const FormPostVehicle = ({ clientId }) => {
       <h1 className="text-2xl font-bold mb-6 text-center">Agregar Vehículo</h1>
       
       <div className="container w-full h-auto flex justify-between items-center gap-y-10 flex-col">
-      <div className=""><h2>Informacion del vehiculo</h2></div>
+      <div className="w-full">
+        <h2 className="text-lg font-semibold text-gray-800 border-b-2 border-gray-300 mb-4">
+          Información del vehículo
+        </h2>
+      </div>
         <div className="vehiculo w-full h-auto flex justify-center items-center gap-x-6 flex-col sm:flex-row">
           <div className="flex flex-wrap gap-x-4 gap-y-8 justify-center items-center min-[476px]:justify-between">
           <div className="flex-grow-1 basis-48">
@@ -81,6 +85,7 @@ const FormPostVehicle = ({ clientId }) => {
                 <option value="">Seleccione</option>
                 <option value="AUTO">AUTO</option>
                 <option value="MOTO">MOTO</option>
+                <option value="TRAILER">TRAILER</option>
                 <option value="CAMIONETA">CAMIONETA</option>
               </select>
             </div>
@@ -134,7 +139,11 @@ const FormPostVehicle = ({ clientId }) => {
             </div>
           </div>
         </div>
-        <div className=""><h2>Informacion del seguro</h2></div>
+        <div className="w-full">
+          <h2 className="text-lg font-semibold text-gray-800 border-b-2 border-gray-300 mb-4">
+            Información del cliente
+          </h2>
+        </div>
         <div className="cliente w-full h-auto flex justify-center items-center gap-x-6 flex-col sm:flex-row">
           <div className="flex flex-wrap gap-x-4 gap-y-8 justify-center items-center min-[476px]:justify-between">
           <div className="flex-grow-1 basis-48">
@@ -147,9 +156,10 @@ const FormPostVehicle = ({ clientId }) => {
                 required
               >
                 <option value="">Seleccione</option>
-                <option value="ALLIANZ">ALLIANZ</option>
-                <option value="MAPFRE">MAPFRE</option>
-                <option value="SURA">SURA</option>
+                <option value="AGROSALTA">AGROSALTA</option>
+                <option value="EQUIDAD">EQUIDAD</option>
+                <option value="PROVIDENCIA">PROVIDENCIA</option>
+                <option value="FEDERACION">FEDERACION</option>
               </select>
             </div>
             <div className="flex-grow-1 basis-48">
@@ -162,15 +172,18 @@ const FormPostVehicle = ({ clientId }) => {
                 required
               >
                 <option value="">Seleccione</option>
-                <option value="TOTAL">TOTAL</option>
-                <option value="PARCIAL">PARCIAL</option>
-                <option value="BASICA">BASICA</option>
+                <option value="A">A</option>
+                <option value="A1">A1</option>
+                <option value="B">B</option>
+                <option value="B1">B1</option>
+                <option value="C">C</option>
+                <option value="C+">C+</option>
               </select>
             </div>
             <div className="flex-grow-1 basis-48">
               <label className="block text-gray-700 text-sm font-bold mb-2">Cuota</label>
               <input
-                type="number"
+                type="text"
                 name="cuota"
                 value={vehicleData.cuota}
                 onChange={handleChange}
@@ -236,14 +249,18 @@ const FormPostVehicle = ({ clientId }) => {
             </div>
             <div className="flex-grow-1 basis-48">
               <label className="block text-gray-700 text-sm font-bold mb-2">Local</label>
-              <input
+              <select
                 type="text"
                 name="local"
                 value={vehicleData.local}
                 onChange={handleChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 required
-              />
+              >
+                <option value="">Seleccione</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+              </select>
             </div>
           </div>
         </div>

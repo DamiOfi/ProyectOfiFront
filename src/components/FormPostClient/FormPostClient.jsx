@@ -2,6 +2,15 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { ContainerFormPostCLient } from "./formPostClient.styled";
 import { notiToast } from "../../components/NotiToast/NotiToast";
+import {
+  validateDni,
+  validateNombre,
+  validateApellido,
+  validateTelefono,
+  validateDireccion,
+  validateLocalidad,
+} from "./formValidations";
+import { div } from "framer-motion/client";
 
 const FormPostClient = ({ onClientCreated }) => {
   const [formData, setFormData] = useState({
@@ -14,38 +23,76 @@ const FormPostClient = ({ onClientCreated }) => {
     enviarMsj: true,
   });
 
+  const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isButtonDisabled, setIsButtonDisabled] = useState(true); // Estado para habilitar/deshabilitar el botón
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
   useEffect(() => {
-    // Verifica si todos los campos están llenos
     const allFieldsFilled = Object.values(formData).every((value) => value !== "");
-    setIsButtonDisabled(!allFieldsFilled); // Si algún campo está vacío, deshabilita el botón
+    setIsButtonDisabled(!allFieldsFilled);
   }, [formData]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+    const newValue = type === "checkbox" ? checked : value;
+
     setFormData({
       ...formData,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: newValue,
     });
+
+    validateField(name, newValue);
+  };
+
+  const validateField = (name, value) => {
+    let error = "";
+    switch (name) {
+      case "dni":
+        error = validateDni(value);
+        break;
+      case "nombre":
+        error = validateNombre(value);
+        break;
+      case "apellido":
+        error = validateApellido(value);
+        break;
+      case "telefono":
+        error = validateTelefono(value);
+        break;
+      case "direccion":
+        error = validateDireccion(value);
+        break;
+      case "localidad":
+        error = validateLocalidad(value);
+        break;
+      default:
+        break;
+    }
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: error }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true); // Cambiar a true al comenzar el envío
+
+    const newErrors = {};
+    Object.keys(formData).forEach((key) => {
+      newErrors[key] = validateField(key, formData[key]);
+    });
+
+    if (Object.values(newErrors).some((error) => error)) {
+      setErrors(newErrors);
+      return;
+    }
+
+    setIsSubmitting(true);
     try {
       const response = await axios.post("http://localhost:3001/clientes", formData);
-      console.log(response);
-      const clientId = response.data.cliente.id; // Obtén el ID del cliente creado
-      console.log(clientId);
       notiToast("success", "Cliente agregado exitosamente");
-      onClientCreated(clientId); // Notifica al componente padre
+      onClientCreated(response.data.cliente.id);
     } catch (error) {
       notiToast("error", "Ocurrió un error al agregar el cliente");
-      console.error("Error:", error);
     } finally {
-      setIsSubmitting(false); // Reestablece el estado al finalizar
+      setIsSubmitting(false);
     }
   };
 
@@ -68,11 +115,10 @@ const FormPostClient = ({ onClientCreated }) => {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 required
               />
+              {errors.dni && <div className="w-full rounded bg-red-200 h-5 border-solid border-2 border-red-600 flex items-center font-bold justify-center"><p className="text-red-600 text-xs">{errors.dni}</p></div>}
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                Nombre
-              </label>
+              <label className="block text-gray-700 text-sm font-bold mb-2">Nombre</label>
               <input
                 type="text"
                 name="nombre"
@@ -81,11 +127,10 @@ const FormPostClient = ({ onClientCreated }) => {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 required
               />
+              {errors.nombre && <div className="w-full rounded bg-red-200 h-5 border-solid border-2 border-red-600 flex items-center font-bold justify-center"><p className="text-red-600 text-xs">{errors.nombre}</p></div>}
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                Localidad
-              </label>
+              <label className="block text-gray-700 text-sm font-bold mb-2">Localidad</label>
               <input
                 type="text"
                 name="localidad"
@@ -94,13 +139,12 @@ const FormPostClient = ({ onClientCreated }) => {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 required
               />
+              {errors.localidad && <div className="w-full rounded bg-red-200 h-5 border-solid border-2 border-red-600 flex items-center font-bold justify-center"><p className="text-red-600 text-xs">{errors.localidad}</p></div>}
             </div>
           </div>
           <div className="flex flex-col items-center justify-between gap-y-3">
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                Apellido
-              </label>
+              <label className="block text-gray-700 text-sm font-bold mb-2">Apellido</label>
               <input
                 type="text"
                 name="apellido"
@@ -109,11 +153,10 @@ const FormPostClient = ({ onClientCreated }) => {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 required
               />
+              {errors.apellido && <div className="w-full rounded bg-red-200 h-5 border-solid border-2 border-red-600 flex items-center font-bold justify-center"><p className="text-red-600 text-xs">{errors.apellido}</p></div>}
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                Teléfono
-              </label>
+              <label className="block text-gray-700 text-sm font-bold mb-2">Teléfono</label>
               <input
                 type="text"
                 name="telefono"
@@ -122,11 +165,10 @@ const FormPostClient = ({ onClientCreated }) => {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 required
               />
+              {errors.telefono && <div className="w-full rounded bg-red-200 h-5 border-solid border-2 border-red-600 flex items-center font-bold justify-center"><p className="text-red-600 text-xs">{errors.telefono}</p></div>}
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                Dirección
-              </label>
+              <label className="block text-gray-700 text-sm font-bold mb-2">Dirección</label>
               <input
                 type="text"
                 name="direccion"
@@ -135,13 +177,14 @@ const FormPostClient = ({ onClientCreated }) => {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 required
               />
+              {errors.direccion && <div className="w-full rounded bg-red-200 h-5 border-solid border-2 border-red-600 flex items-center font-bold justify-center"><p className="text-red-600 text-xs">{errors.direccion}</p></div>}
             </div>
           </div>
         </div>
         <div className="flex items-center justify-end w-full">
           <button
             type="submit"
-            disabled={isButtonDisabled || isSubmitting} // Deshabilitar el botón si no todos los campos están llenos o si está enviando
+            disabled={isButtonDisabled || isSubmitting}
             className={`${
               isButtonDisabled || isSubmitting ? "bg-gray-500" : "bg-blue-500 hover:bg-blue-700"
             } text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline`}
