@@ -2,6 +2,19 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { notiToast } from "../../components/NotiToast/NotiToast";
+import {
+  validateTipo,
+  validatePatente,
+  validateMarca,
+  validateModelo,
+  validateAño,
+  validateCuota,
+  validatePrecio,
+  validateDate,
+  validateCompañia,
+  validateCobertura,
+  validateLocal,
+} from "./vehicleValidations";
 
 const FormPostVehicle = ({ clientId }) => {
   const navigate = useNavigate();
@@ -15,9 +28,9 @@ const FormPostVehicle = ({ clientId }) => {
     clientId,
     tipo: "",
     patente: "",
-    compañia: "",
+    compañia: "AGROSALTA",
     cuota: "1",
-    cobertura: "",
+    cobertura: "A",
     ultimo_pago: new Date().toISOString().split("T")[0],
     fecha_vencimiento: getDefaultExpirationDate(),
     primer_pago: new Date().toISOString().split("T")[0],
@@ -29,21 +42,71 @@ const FormPostVehicle = ({ clientId }) => {
     local: "",
   });
 
+  const [errors, setErrors] = useState({});
+
   const [isButtonDisabled, setIsButtonDisabled] = useState(true); // Estado para habilitar/deshabilitar el botón
 
   useEffect(() => {
-    // Verifica si todos los campos están llenos
+    const noErrors = Object.values(errors).every((error) => error === "");
     const allFieldsFilled = Object.values(vehicleData).every((value) => value !== "");
-    setIsButtonDisabled(!allFieldsFilled); // Si algún campo está vacío, deshabilita el botón
-  }, [vehicleData]);
+    setIsButtonDisabled(!(noErrors && allFieldsFilled));
+  }, [vehicleData, errors]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+  
+    let error = "";
+    switch (name) {
+      case "tipo":
+        error = validateTipo(value);
+        break;
+      case "patente":
+        error = validatePatente(value);
+        break;
+      case "marca":
+        error = validateMarca(value);
+        break;
+      case "modelo":
+        error = validateModelo(value);
+        break;
+      case "año":
+        error = validateAño(value);
+        break;
+      case "cuota":
+        error = validateCuota(value);
+        break;
+      case "precio_real":
+        error = validatePrecio(value, "precio real");
+        break;
+      case "precio_agencia":
+        error = validatePrecio(value, "precio agencia");
+        break;
+      case "compañia":
+        error = validateCompañia(value, "compañia");
+        break;
+      case "cobertura":
+        error = validateCobertura(value, "cobertura");
+        break;
+      case "local":
+        error = validateLocal(value, "local");
+        break;
+      case "primer_pago":
+      case "ultimo_pago":
+      case "fecha_vencimiento":
+        error = validateDate(value, name);
+        break;
+      default:
+        break;
+    }
+  
+    setErrors({ ...errors, [name]: error });
+  
     setVehicleData({
       ...vehicleData,
-      [name]: name === "modelo" ? value.toUpperCase() : value,
+      [name]: name === "modelo" || "patente" ? value.toUpperCase() : value,
     });
   };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -68,18 +131,18 @@ const FormPostVehicle = ({ clientId }) => {
       <div className="container w-full h-auto flex justify-between items-center gap-y-10 flex-col">
       <div className="w-full">
         <h2 className="text-lg font-semibold text-gray-800 border-b-2 border-gray-300 mb-4">
-          Información del vehículo
+          Información del Vehículo
         </h2>
       </div>
         <div className="vehiculo w-full h-auto flex justify-center items-center gap-x-6 flex-col sm:flex-row">
-          <div className="flex flex-wrap gap-x-4 gap-y-8 justify-center items-center min-[476px]:justify-between">
+          <div className="flex flex-wrap gap-x-4 gap-y-8 justify-center items-center min-[476px]:justify-between"> 
           <div className="flex-grow-1 basis-48">
               <label className="block text-gray-700 text-sm font-bold mb-2">Tipo</label>
               <select
                 name="tipo"
                 value={vehicleData.tipo}
                 onChange={handleChange}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="cursor-pointer shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 required
               >
                 <option value="">Seleccione</option>
@@ -87,7 +150,9 @@ const FormPostVehicle = ({ clientId }) => {
                 <option value="MOTO">MOTO</option>
                 <option value="TRAILER">TRAILER</option>
                 <option value="CAMIONETA">CAMIONETA</option>
+                <option value="PERSONA">PERSONA</option>
               </select>
+              {errors.tipo && <div className="w-full rounded bg-red-200 p-1 border-solid border-2 border-red-600 flex items-center font-bold justify-center"><p className="text-red-600 text-xs">{errors.tipo}</p></div>}
             </div>
             <div className="flex-grow-1 basis-48">
               <label className="block text-gray-700 text-sm font-bold mb-2">Patente</label>
@@ -99,6 +164,7 @@ const FormPostVehicle = ({ clientId }) => {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 required
               />
+              {errors.patente && <div className="w-full rounded bg-red-200 p-1 border-solid border-2 border-red-600 flex items-center font-bold justify-center"><p className="text-red-600 text-xs">{errors.patente}</p></div>}
             </div>
             <div className="flex-grow-1 basis-48">
               <label className="block text-gray-700 text-sm font-bold mb-2">Marca</label>
@@ -106,7 +172,7 @@ const FormPostVehicle = ({ clientId }) => {
                 name="marca"
                 value={vehicleData.marca}
                 onChange={handleChange}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="cursor-pointer shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 required
               >
                 <option value="">Seleccione</option>
@@ -114,6 +180,7 @@ const FormPostVehicle = ({ clientId }) => {
                 <option value="FORD">FORD</option>
                 <option value="CHEVROLET">CHEVROLET</option>
               </select>
+              {errors.marca && <div className="w-full rounded bg-red-200 p-1 border-solid border-2 border-red-600 flex items-center font-bold justify-center"><p className="text-red-600 text-xs">{errors.marca}</p></div>}
             </div>
             <div className="flex-grow-1 basis-48">
               <label className="block text-gray-700 text-sm font-bold mb-2">Modelo</label>
@@ -125,6 +192,7 @@ const FormPostVehicle = ({ clientId }) => {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 required
               />
+              {errors.modelo && <div className="w-full rounded bg-red-200 p-1 border-solid border-2 border-red-600 flex items-center font-bold justify-center"><p className="text-red-600 text-xs">{errors.modelo}</p></div>}
             </div>
             <div className="flex-grow-1 basis-48">
               <label className="block text-gray-700 text-sm font-bold mb-2">Año</label>
@@ -136,23 +204,24 @@ const FormPostVehicle = ({ clientId }) => {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 required
               />
+              {errors.año && <div className="w-full rounded bg-red-200 p-1 border-solid border-2 border-red-600 flex items-center font-bold justify-center"><p className="text-red-600 text-xs">{errors.año}</p></div>}
             </div>
           </div>
         </div>
         <div className="w-full">
           <h2 className="text-lg font-semibold text-gray-800 border-b-2 border-gray-300 mb-4">
-            Información del cliente
+            Información del Seguro
           </h2>
         </div>
         <div className="cliente w-full h-auto flex justify-center items-center gap-x-6 flex-col sm:flex-row">
           <div className="flex flex-wrap gap-x-4 gap-y-8 justify-center items-center min-[476px]:justify-between">
-          <div className="flex-grow-1 basis-48">
+            <div className="flex-grow-1 basis-48">
               <label className="block text-gray-700 text-sm font-bold mb-2">Compañía</label>
               <select
                 name="compañia"
                 value={vehicleData.compañia}
                 onChange={handleChange}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="cursor-pointer shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 required
               >
                 <option value="">Seleccione</option>
@@ -161,6 +230,7 @@ const FormPostVehicle = ({ clientId }) => {
                 <option value="PROVIDENCIA">PROVIDENCIA</option>
                 <option value="FEDERACION">FEDERACION</option>
               </select>
+              {errors.compañia && <div className="w-full rounded bg-red-200 h-5 border-solid border-2 border-red-600 flex items-center font-bold justify-center"><p className="text-red-600 text-xs">{errors.compañia}</p></div>}
             </div>
             <div className="flex-grow-1 basis-48">
               <label className="block text-gray-700 text-sm font-bold mb-2">Cobertura</label>
@@ -168,7 +238,7 @@ const FormPostVehicle = ({ clientId }) => {
                 name="cobertura"
                 value={vehicleData.cobertura}
                 onChange={handleChange}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="cursor-pointer shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 required
               >
                 <option value="">Seleccione</option>
@@ -179,6 +249,7 @@ const FormPostVehicle = ({ clientId }) => {
                 <option value="C">C</option>
                 <option value="C+">C+</option>
               </select>
+              {errors.cobertura && <div className="w-full rounded bg-red-200 h-5 border-solid border-2 border-red-600 flex items-center font-bold justify-center"><p className="text-red-600 text-xs">{errors.cobertura}</p></div>}
             </div>
             <div className="flex-grow-1 basis-48">
               <label className="block text-gray-700 text-sm font-bold mb-2">Cuota</label>
@@ -191,6 +262,7 @@ const FormPostVehicle = ({ clientId }) => {
                 required
                 min="1"
               />
+              {errors.cuota && <div className="w-full rounded bg-red-200 p-1 border-solid border-2 border-red-600 flex items-center font-bold justify-center"><p className="text-red-600 text-xs">{errors.cuota}</p></div>}
             </div>
             <div className="flex-grow-1 basis-48">
               <label className="block text-gray-700 text-sm font-bold mb-2">Primer Pago</label>
@@ -202,6 +274,7 @@ const FormPostVehicle = ({ clientId }) => {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 required
               />
+              {errors.primer_pago && <div className="w-full rounded bg-red-200 p-1 border-solid border-2 border-red-600 flex items-center font-bold justify-center"><p className="text-red-600 text-xs">{errors.primer_pago}</p></div>}
             </div>
             <div className="flex-grow-1 basis-48">
               <label className="block text-gray-700 text-sm font-bold mb-2">Último Pago</label>
@@ -213,6 +286,7 @@ const FormPostVehicle = ({ clientId }) => {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 required
               />
+              {errors.ultimo_pago && <div className="w-full rounded bg-red-200 p-1 border-solid border-2 border-red-600 flex items-center font-bold justify-center"><p className="text-red-600 text-xs">{errors.ultimo_pago}</p></div>}
             </div>
             <div className="flex-grow-1 basis-48">
               <label className="block text-gray-700 text-sm font-bold mb-2">Fecha de Vencimiento</label>
@@ -224,6 +298,7 @@ const FormPostVehicle = ({ clientId }) => {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 required
               />
+              {errors.fecha_vencimiento && <div className="w-full rounded bg-red-200 p-1 border-solid border-2 border-red-600 flex items-center font-bold justify-center"><p className="text-red-600 text-xs">{errors.fecha_vencimiento}</p></div>}
             </div>
             <div className="flex-grow-1 basis-48">
               <label className="block text-gray-700 text-sm font-bold mb-2">Precio Real</label>
@@ -235,6 +310,7 @@ const FormPostVehicle = ({ clientId }) => {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 required
               />
+              {errors.precio_real && <div className="w-full rounded bg-red-200 p-1 border-solid border-2 border-red-600 flex items-center font-bold justify-center"><p className="text-red-600 text-xs">{errors.precio_real}</p></div>}
             </div>
             <div className="flex-grow-1 basis-48">
               <label className="block text-gray-700 text-sm font-bold mb-2">Precio Agencia</label>
@@ -246,6 +322,7 @@ const FormPostVehicle = ({ clientId }) => {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 required
               />
+              {errors.precio_agencia && <div className="w-full rounded bg-red-200 p-1 border-solid border-2 border-red-600 flex items-center font-bold justify-center"><p className="text-red-600 text-xs">{errors.precio_agencia}</p></div>}
             </div>
             <div className="flex-grow-1 basis-48">
               <label className="block text-gray-700 text-sm font-bold mb-2">Local</label>
@@ -254,13 +331,14 @@ const FormPostVehicle = ({ clientId }) => {
                 name="local"
                 value={vehicleData.local}
                 onChange={handleChange}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="cursor-pointer shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 required
               >
                 <option value="">Seleccione</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
               </select>
+              {errors.local && <div className="w-full rounded bg-red-200 h-5 border-solid border-2 border-red-600 flex items-center font-bold justify-center"><p className="text-red-600 text-xs">{errors.local}</p></div>}
             </div>
           </div>
         </div>
@@ -269,7 +347,7 @@ const FormPostVehicle = ({ clientId }) => {
         <button
           type="submit"
           className={`${
-            isButtonDisabled ? "bg-gray-500" : "bg-green-500 hover:bg-green-700"
+            isButtonDisabled ? "bg-gray-500 cursor-not-allowed" : "bg-green-500 hover:bg-green-700"
           } text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline`}
           disabled={isButtonDisabled} // Deshabilitar si el botón no debe estar habilitado
         >

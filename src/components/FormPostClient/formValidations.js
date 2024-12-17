@@ -1,6 +1,5 @@
 export const validateDni = (dni) => {
     if (!dni) return "El DNI es obligatorio.";
-    if (!/^\d{8}$/.test(dni)) return "El DNI debe tener 8 dígitos.";
     return "";
   };
   

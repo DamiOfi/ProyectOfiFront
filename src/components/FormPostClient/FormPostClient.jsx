@@ -29,8 +29,9 @@ const FormPostClient = ({ onClientCreated }) => {
 
   useEffect(() => {
     const allFieldsFilled = Object.values(formData).every((value) => value !== "");
-    setIsButtonDisabled(!allFieldsFilled);
-  }, [formData]);
+    const noErrors = Object.values(errors).every((error) => !error);
+    setIsButtonDisabled(!(allFieldsFilled && noErrors));
+  }, [formData, errors]);  
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -115,7 +116,7 @@ const FormPostClient = ({ onClientCreated }) => {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 required
               />
-              {errors.dni && <div className="w-full rounded bg-red-200 h-5 border-solid border-2 border-red-600 flex items-center font-bold justify-center"><p className="text-red-600 text-xs">{errors.dni}</p></div>}
+              {errors.dni && <div className="w-full rounded bg-red-200 p-1 border-solid border-2 border-red-600 flex items-center font-bold justify-center"><p className="text-red-600 text-xs">{errors.dni}</p></div>}
             </div>
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2">Nombre</label>
@@ -127,7 +128,7 @@ const FormPostClient = ({ onClientCreated }) => {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 required
               />
-              {errors.nombre && <div className="w-full rounded bg-red-200 h-5 border-solid border-2 border-red-600 flex items-center font-bold justify-center"><p className="text-red-600 text-xs">{errors.nombre}</p></div>}
+              {errors.nombre && <div className="w-full rounded bg-red-200 p-1 border-solid border-2 border-red-600 flex items-center font-bold justify-center"><p className="text-red-600 text-xs">{errors.nombre}</p></div>}
             </div>
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2">Localidad</label>
@@ -139,7 +140,7 @@ const FormPostClient = ({ onClientCreated }) => {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 required
               />
-              {errors.localidad && <div className="w-full rounded bg-red-200 h-5 border-solid border-2 border-red-600 flex items-center font-bold justify-center"><p className="text-red-600 text-xs">{errors.localidad}</p></div>}
+              {errors.localidad && <div className="w-full rounded bg-red-200 p-1 border-solid border-2 border-red-600 flex items-center font-bold justify-center"><p className="text-red-600 text-xs">{errors.localidad}</p></div>}
             </div>
           </div>
           <div className="flex flex-col items-center justify-between gap-y-3">
@@ -153,7 +154,7 @@ const FormPostClient = ({ onClientCreated }) => {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 required
               />
-              {errors.apellido && <div className="w-full rounded bg-red-200 h-5 border-solid border-2 border-red-600 flex items-center font-bold justify-center"><p className="text-red-600 text-xs">{errors.apellido}</p></div>}
+              {errors.apellido && <div className="w-full rounded bg-red-200 p-1 border-solid border-2 border-red-600 flex items-center font-bold justify-center"><p className="text-red-600 text-xs">{errors.apellido}</p></div>}
             </div>
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2">Teléfono</label>
@@ -165,7 +166,7 @@ const FormPostClient = ({ onClientCreated }) => {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 required
               />
-              {errors.telefono && <div className="w-full rounded bg-red-200 h-5 border-solid border-2 border-red-600 flex items-center font-bold justify-center"><p className="text-red-600 text-xs">{errors.telefono}</p></div>}
+              {errors.telefono && <div className="w-full rounded bg-red-200 p-1 border-solid border-2 border-red-600 flex items-center font-bold justify-center"><p className="text-red-600 text-xs">{errors.telefono}</p></div>}
             </div>
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2">Dirección</label>
@@ -177,7 +178,7 @@ const FormPostClient = ({ onClientCreated }) => {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 required
               />
-              {errors.direccion && <div className="w-full rounded bg-red-200 h-5 border-solid border-2 border-red-600 flex items-center font-bold justify-center"><p className="text-red-600 text-xs">{errors.direccion}</p></div>}
+              {errors.direccion && <div className="w-full rounded bg-red-200 p-1 border-solid border-2 border-red-600 flex items-center font-bold justify-center"><p className="text-red-600 text-xs">{errors.direccion}</p></div>}
             </div>
           </div>
         </div>
@@ -186,7 +187,7 @@ const FormPostClient = ({ onClientCreated }) => {
             type="submit"
             disabled={isButtonDisabled || isSubmitting}
             className={`${
-              isButtonDisabled || isSubmitting ? "bg-gray-500" : "bg-blue-500 hover:bg-blue-700"
+              isButtonDisabled || isSubmitting ? "bg-gray-500 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-700"
             } text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline`}
           >
             Siguiente

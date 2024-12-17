@@ -6,6 +6,7 @@ import Home from './views/Home/Home.jsx';
 import Messages from './views/Messages/Messages.jsx';
 import MainForm from './views/MainForm/MainForm.jsx';
 import Insured from './views/Insured/Insured.jsx';
+import Profile from './views/Profile/Profile.jsx';
 
 function App() {
 
@@ -16,6 +17,7 @@ function App() {
         <Route path='/clientes-vencidos' element={<Messages />} />
         <Route path='/formulario' element={<MainForm />} />
         <Route path='/asegurado' element={<Insured />} />
+        <Route path="/profile/:id" element={<Profile />} />
       </Routes>
     </>
   )
