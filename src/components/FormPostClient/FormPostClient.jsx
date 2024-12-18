@@ -39,7 +39,7 @@ const FormPostClient = ({ onClientCreated }) => {
 
     setFormData({
       ...formData,
-      [name]: newValue,
+      [name]: name === "apellido" || "nombre" || "localidad" || "direccion" ? value.toUpperCase() :newValue,
     });
 
     validateField(name, newValue);

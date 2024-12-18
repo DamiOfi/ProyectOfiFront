@@ -1,72 +1,89 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { ContainerInsured, SearchBar, ResultsList, ListItem } from './insured.styled';
+import {
+  ContainerInsured,
+  SearchContainer,
+  SearchInput,
+  Button,
+  InsuredList,
+  TableHeader,
+  TableRow,
+  TableCell,
+} from './insured.styled';
 
 const Insured = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [insuredList, setInsuredList] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [clients, setClients] = useState([]);
+  const [search, setSearch] = useState('');
   const navigate = useNavigate();
 
-  const fetchInsured = async () => {
-    setLoading(true);
+  const fetchAllClients = async () => {
     try {
       const response = await axios.get('http://localhost:3001/clientes');
-      setInsuredList(response.data);
+      setClients(response.data);
     } catch (error) {
-      console.error('Error fetching insured:', error);
+      console.error('Error al obtener los asegurados:', error);
     }
-    setLoading(false);
+  };
+
+  const handleClientClick = async (id) => {
+    try {
+      const response = await axios.get(`http://localhost:3001/clientes/${id}`);
+      const clientData = response.data;
+      navigate(`/profile`, { state: { client: clientData } });
+    } catch (error) {
+      console.error('Error al obtener la información del cliente:', error);
+    }
+  };
+
+  const handleSearch = () => {
+    if (search.trim() === '') {
+      fetchAllClients();
+    } else {
+      console.log('Función de búsqueda no implementada aún');
+    }
   };
 
   useEffect(() => {
-    fetchInsured();
+    fetchAllClients();
   }, []);
-
-  const handleSearch = () => {
-    if (searchTerm.trim() === '') {
-      fetchInsured();
-    } else {
-      // Future functionality: Add logic for searching based on the input
-      console.log('Search triggered with:', searchTerm);
-    }
-  };
-
-  const handleClientClick = (clientId) => {
-    navigate(`/profile/${clientId}`);
-  };
 
   return (
     <ContainerInsured>
-      <h1>Asegurados</h1>
-      <SearchBar>
-        <input
+      <SearchContainer>
+        <SearchInput
           type="text"
           placeholder="Buscar asegurado..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
         />
-        <button onClick={handleSearch}>Buscar</button>
-      </SearchBar>
-      {loading ? (
-        <p>Cargando...</p>
-      ) : (
-        <ResultsList>
-          {insuredList.map((insured) => (
-            <ListItem key={insured.id} onClick={() => handleClientClick(insured.id)}>
-              <p><strong>{insured.apellido}, {insured.nombre}</strong></p>
-              <p>DNI: {insured.dni}</p>
-              <p>Teléfono: {insured.telefono}</p>
-              {insured.Vehicles.length > 0 ? (
-                <p>Vehículos: {insured.Vehicles.length}</p>
-              ) : (
-                <p>Sin vehículos registrados.</p>
-              )}
-            </ListItem>
-          ))}
-        </ResultsList>
-      )}
+        <Button onClick={handleSearch}>Buscar</Button>
+      </SearchContainer>
+
+      <InsuredList>
+        <TableHeader>
+          <TableCell>Apellido</TableCell>
+          <TableCell>Nombre</TableCell>
+          <TableCell>Patente</TableCell>
+          <TableCell>Compañía</TableCell>
+          <TableCell>Cuota</TableCell>
+        </TableHeader>
+        {clients.map((client) => (
+          <TableRow key={client.id} onClick={() => handleClientClick(client.id)}>
+            <TableCell>{client.apellido}</TableCell>
+            <TableCell>{client.nombre}</TableCell>
+            <TableCell>
+              {client.Vehicles.length > 0 ? client.Vehicles[0].patente : 'N/A'}
+            </TableCell>
+            <TableCell>
+              {client.Vehicles.length > 0 ? client.Vehicles[0].compañia : 'N/A'}
+            </TableCell>
+            <TableCell>
+              {client.Vehicles.length > 0 ? client.Vehicles[0].cuota : 'N/A'}
+            </TableCell>
+          </TableRow>
+        ))}
+      </InsuredList>
     </ContainerInsured>
   );
 };

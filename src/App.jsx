@@ -17,7 +17,7 @@ function App() {
         <Route path='/clientes-vencidos' element={<Messages />} />
         <Route path='/formulario' element={<MainForm />} />
         <Route path='/asegurado' element={<Insured />} />
-        <Route path="/profile/:id" element={<Profile />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </>
   )

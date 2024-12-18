@@ -1,57 +1,62 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { ContainerProfile, ClientInfo, VehicleList, VehicleItem } from './profile.styled';
+import FormPostVehicle from '../../components/FormPostVehicle/FormPostVehicle';
+/* import './Profile.css'; */
 
-const Profile = () => {
-  const { id } = useParams();
-  const [client, setClient] = useState(null);
-  const [loading, setLoading] = useState(false);
-
-  const fetchClient = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get(`http://localhost:3001/clientes/${id}`);
-      setClient(response.data);
-    } catch (error) {
-      console.error('Error fetching client:', error);
-    }
-    setLoading(false);
-  };
+const Profile = ({ clientId }) => {
+  const [clientData, setClientData] = useState(null);
+  const [vehicles, setVehicles] = useState([]);
 
   useEffect(() => {
-    fetchClient();
-  }, [id]);
+    const fetchClientData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3001/clientes/${clientId}`);
+        setClientData(response.data);
+        setVehicles(response.data.vehicles || []);
+      } catch (error) {
+        console.error('Error fetching client data:', error);
+      }
+    };
 
-  if (loading) return <p>Cargando...</p>;
-  if (!client) return <p>No se encontró el cliente.</p>;
+    fetchClientData();
+  }, [clientId]);
+
+  const handleAddVehicle = (newVehicle) => {
+    setVehicles((prevVehicles) => [...prevVehicles, newVehicle]);
+  };
+
+  if (!clientData) return <p>Loading...</p>;
 
   return (
-    <ContainerProfile>
-      <h1>Perfil de {client.nombre} {client.apellido}</h1>
-      <ClientInfo>
-        <p><strong>DNI:</strong> {client.dni}</p>
-        <p><strong>Teléfono:</strong> {client.telefono}</p>
-        <p><strong>Localidad:</strong> {client.localidad}</p>
-        <p><strong>Dirección:</strong> {client.direccion}</p>
-      </ClientInfo>
-      <h2>Vehículos</h2>
-      {client.Vehicles.length > 0 ? (
-        <VehicleList>
-          {client.Vehicles.map((vehicle) => (
-            <VehicleItem key={vehicle.id}>
-              <p><strong>Marca:</strong> {vehicle.marca}</p>
-              <p><strong>Modelo:</strong> {vehicle.modelo}</p>
+    <div className="profile-container">
+      <div className="client-info">
+        <h2>{`${clientData.nombre} ${clientData.apellido}`}</h2>
+        <p><strong>Teléfono:</strong> {clientData.telefono}</p>
+        <p><strong>Compañía:</strong> {clientData.compania}</p>
+        <p><strong>Último pago:</strong> {clientData.ultimoPago}</p>
+        <p><strong>Fecha de vencimiento:</strong> {clientData.fechaVencimiento}</p>
+        <p><strong>Ganancia:</strong> ${clientData.ganancia}</p>
+      </div>
+
+      <div className="vehicles-list">
+        <h3>Vehículos</h3>
+        <div className="vehicle-cards">
+          {vehicles.map((vehicle, index) => (
+            <div key={index} className="vehicle-card">
               <p><strong>Patente:</strong> {vehicle.patente}</p>
-              <p><strong>Compañía:</strong> {vehicle.compañia}</p>
-              <p><strong>Cuota:</strong> {vehicle.cuota}</p>
-            </VehicleItem>
+              <p><strong>Modelo:</strong> {vehicle.modelo}</p>
+              <p><strong>Año:</strong> {vehicle.anio}</p>
+              <p><strong>Color:</strong> {vehicle.color}</p>
+            </div>
           ))}
-        </VehicleList>
-      ) : (
-        <p>Este cliente no tiene vehículos registrados.</p>
-      )}
-    </ContainerProfile>
+
+          {/* Card to add a new vehicle */}
+          <div className="add-vehicle-card">
+            <FormPostVehicle clientId={clientId} onAddVehicle={handleAddVehicle} />
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

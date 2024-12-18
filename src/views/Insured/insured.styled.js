@@ -1,53 +1,88 @@
 import styled from 'styled-components';
 
+// Contenedor principal
 export const ContainerInsured = styled.div`
   padding: 20px;
   font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  min-height: 100vh;
 `;
 
-export const SearchBar = styled.div`
+// Contenedor del buscador
+export const SearchContainer = styled.div`
   display: flex;
-  gap: 10px;
+  justify-content: center;
   margin-bottom: 20px;
+`;
 
-  input {
-    flex: 1;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+// Input de búsqueda
+export const SearchInput = styled.input`
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 300px;
+  margin-right: 10px;
+
+  &:focus {
+    border-color: #007bff;
+    outline: none;
   }
+`;
 
-  button {
-    padding: 8px 16px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
+// Botón de buscar
+export const Button = styled.button`
+  padding: 10px 20px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 
-  button:hover {
+  &:hover {
     background-color: #0056b3;
   }
 `;
 
-export const ResultsList = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+// Contenedor de la tabla
+export const InsuredList = styled.div`
+  display: table;
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 `;
 
-export const ListItem = styled.div`
-  padding: 15px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  background-color: #f9f9f9;
+// Fila de encabezado
+export const TableHeader = styled.div`
+  display: table-row;
+  background-color: #007bff;
+  color: #fff;
+  font-weight: bold;
+`;
 
-  p {
-    margin: 5px 0;
+// Columna de la tabla (encabezado y datos)
+export const TableCell = styled.div`
+  display: table-cell;
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: left;
+
+  &:first-child {
+    font-weight: bold;
+  }
+`;
+
+// Fila de datos
+export const TableRow = styled.div`
+  display: table-row;
+  &:nth-child(even) {
+    background-color: #f2f2f2;
   }
 
-  strong {
-    font-size: 16px;
+  &:hover {
+    background-color: #e9f5ff;
+    cursor: pointer;
   }
 `;
