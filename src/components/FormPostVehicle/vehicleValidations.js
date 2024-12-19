@@ -4,13 +4,12 @@ const validateTipo = (value) => {
   };
   
   const validatePatente = (value) => {
-    const regex = /^(101)?[A-Z]{3}[0-9]{3}$|^(101)?[A-Z]{2}[0-9]{3}[A-Z]{2}$/;
+    const regex = /^(101)?[A-Z]{3}[0-9]{3}$|^(101)?[A-Z]{2}[0-9]{3}[A-Z]{2}$|^(101)?[0-9]{3}[A-Z]{3}$/;
     if (!regex.test(value)) {
-      return "La patente debe estar en formato AA123BB o AAA123";
+      return "La patente debe estar en formato AA123BB, AAA123 o 132AAA";
     }
     return "";
-  };
-  
+  };  
   
   const validateMarca = (value) => {
     if (!value) return "La marca es obligatoria.";

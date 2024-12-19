@@ -1,59 +1,117 @@
 import styled from 'styled-components';
 
-export const ContainerProfile = styled.div`
-  padding: 20px;
-  font-family: Arial, sans-serif;
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-`;
-
-export const ClientInfo = styled.div`
-  margin-bottom: 20px;
-
-  h2 {
-    color: #1f2937; /* Tailwind: text-gray-800 */
-    margin-bottom: 15px;
-  }
-
-  p {
-    margin: 5px 0;
-    font-size: 1rem; /* Tailwind: text-lg */
-    color: #374151; /* Tailwind: text-gray-700 */
-  }
-
-  span {
-    font-weight: bold; /* Tailwind: font-semibold */
-    color: #111827; /* Tailwind: text-gray-900 */
-  }
-`;
-
-export const VehicleList = styled.div`
+export const AddVehicleCard = styled.div`
   display: flex;
-  flex-direction: column;
-  gap: 15px;
+  justify-content: center;
+  align-items: center;
+  background-color: #f9fafb;
+  border: 2px dashed #d1d5db;
+  border-radius: 0.5rem;
+  height: 100%;
+  min-height: 150px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 
-  h3 {
-    color: #374151; /* Tailwind: text-gray-700 */
-    margin-bottom: 10px;
+  &:hover {
+    background-color: #f3f4f6;
   }
-`;
-
-export const VehicleItem = styled.div`
-  padding: 10px;
-  border: 1px solid #e5e7eb; /* Tailwind: border-gray-300 */
-  border-radius: 4px;
-  background-color: #f9f9f9;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Tailwind: shadow-md */
 
   p {
-    margin: 5px 0;
-    font-size: 0.9rem; /* Tailwind: text-base */
-    color: #374151; /* Tailwind: text-gray-700 */
-  }
-
-  span {
-    font-weight: bold; /* Tailwind: font-semibold */
-    color: #111827; /* Tailwind: text-gray-900 */
+    font-size: 1rem;
+    color: #6b7280;
   }
 `;
+
+export const VehicleCard = styled.div`
+  padding: 1rem;
+  background-color: #f9fafb;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s, opacity 0.3s, transform 0.3s;
+
+  &:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Animaciones para la transición */
+  &.vehicle-enter {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  &.vehicle-enter-active {
+    opacity: 1;
+    transform: scale(1);
+    transition: opacity 300ms, transform 300ms;
+  }
+
+  &.vehicle-exit {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  &.vehicle-exit-active {
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 300ms, transform 300ms;
+  }
+
+  h4 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #111827;
+  }
+
+  p {
+    font-size: 0.875rem;
+    color: #4b5563;
+    margin-bottom: 0.25rem;
+  }
+`;
+
+export const OptionsMenu = styled.div`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: white;
+  border-radius: 0.375rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 120px;
+  padding: 0.5rem 0;
+  z-index: 10;
+
+  button {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 0.5rem;
+    background-color: transparent;
+    border: none;
+    font-size: 0.875rem;
+    color: #111827;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #f3f4f6;
+    }
+  }
+`;
+
+export const DotsButton = styled.button`
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #4b5563;
+  cursor: pointer;
+  padding: 0;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+  
+  &:hover {
+    color: #111827;
+  }
+`;
+
