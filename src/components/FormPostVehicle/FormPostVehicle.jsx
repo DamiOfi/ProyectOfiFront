@@ -172,7 +172,7 @@ const FormPostVehicle = ({ clientId }) => {
                 {errors.patente && <div className="w-full rounded bg-red-200 p-1 border-solid border-2 border-red-600 flex items-center font-bold justify-center"><p className="text-red-600 text-xs">{errors.patente}</p></div>}
               </div>
               <div className="flex-grow-1 basis-48">
-                <label className="block text-gray-700 text-sm font-bold mb-2">Marca</label>
+              <label className="block text-gray-700 text-sm font-bold mb-2">Marca</label>
                 <select
                   name="marca"
                   value={vehicleData.marca}
@@ -181,11 +181,38 @@ const FormPostVehicle = ({ clientId }) => {
                   required
                 >
                   <option value="">Seleccione</option>
-                  <option value="TOYOTA">TOYOTA</option>
-                  <option value="FORD">FORD</option>
+                  <option value="BMW">BMW</option>
                   <option value="CHEVROLET">CHEVROLET</option>
+                  <option value="CITROEN">CITROEN</option>
+                  <option value="DAF">DAF</option>
+                  <option value="DODGE">DODGE</option>
+                  <option value="FIAT">FIAT</option>
+                  <option value="FORD">FORD</option>
+                  <option value="HINO">HINO</option>
+                  <option value="HONDA">HONDA</option>
+                  <option value="HYUNDAI">HYUNDAI</option>
+                  <option value="ISUZU">ISUZU</option>
+                  <option value="IVECO">IVECO</option>
+                  <option value="JEEP">JEEP</option>
+                  <option value="KAWASAKI">KAWASAKI</option>
+                  <option value="KENWORTH">KENWORTH</option>
+                  <option value="KIA">KIA</option>
+                  <option value="MACK">MACK</option>
+                  <option value="MAN">MAN</option>
+                  <option value="MERCEDES-BENZ">MERCEDES-BENZ</option>
+                  <option value="MITSUBISHI">MITSUBISHI</option>
+                  <option value="NISSAN">NISSAN</option>
+                  <option value="PEUGEOT">PEUGEOT</option>
+                  <option value="PETERBILT">PETERBILT</option>
+                  <option value="RAM">RAM</option>
+                  <option value="RENAULT">RENAULT</option>
+                  <option value="SCANIA">SCANIA</option>
+                  <option value="SUZUKI">SUZUKI</option>
+                  <option value="TOYOTA">TOYOTA</option>
+                  <option value="VOLVO">VOLVO</option>
+                  <option value="YAMAHA">YAMAHA</option>
                 </select>
-                {errors.marca && <div className="w-full rounded bg-red-200 p-1 border-solid border-2 border-red-600 flex items-center font-bold justify-center"><p className="text-red-600 text-xs">{errors.marca}</p></div>}
+              {errors.marca && <div className="w-full rounded bg-red-200 p-1 border-solid border-2 border-red-600 flex items-center font-bold justify-center"><p className="text-red-600 text-xs">{errors.marca}</p></div>}
               </div>
               <div className="flex-grow-1 basis-48">
                 <label className="block text-gray-700 text-sm font-bold mb-2">Modelo</label>
