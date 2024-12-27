@@ -19,7 +19,8 @@ const Insured = () => {
 
   const fetchAllClients = async () => {
     try {
-      const response = await axios.get('http://localhost:3001/clientes');
+      const response = await axios.get('https://proyectofi-production.up.railway.app/clientes'); // PRODUCCION
+      // const response = await axios.get('http://localhost:3001/clientes'); // LOCAL
       setClients(response.data);
     } catch (error) {
       console.error('Error al obtener los asegurados:', error);
@@ -28,7 +29,8 @@ const Insured = () => {
 
   const handleClientClick = async (id) => {
     try {
-      const response = await axios.get(`http://localhost:3001/clientes/${id}`);
+      const response = await axios.get(`https://proyectofi-production.up.railway.app/clientes/${id}`); // PRODUCCION
+      // const response = await axios.get(`http://localhost:3001/clientes/${id}`); // LOCAL
       const clientData = response.data;
       navigate(`/profile`, { state: { client: clientData } });
     } catch (error) {

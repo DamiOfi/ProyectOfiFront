@@ -6,7 +6,8 @@ export const fetchClientesVencidos = createAsyncThunk(
   'clientesVencidos/fetchClientesVencidos',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get('http://localhost:3001/clientes-vencidos');
+      const response = await axios.get('https://proyectofi-production.up.railway.app/clientes-vencidos'); // PRODUCCION
+      // const response = await axios.get('http://localhost:3001/clientes-vencidos'); // LOCAL
       return response.data; // Asume que la respuesta es un array de clientes
     } catch (error) {
       return rejectWithValue(error.response?.data || 'Error al cargar los clientes vencidos');

@@ -27,7 +27,8 @@ const Profile = () => {
     if (!clientId) return;
 
     try {
-      const response = await axios.get(`http://localhost:3001/clientes/${clientId}`);
+      const response = await axios.get(`https://proyectofi-production.up.railway.app/clientes/${clientId}`); // PRODUCCION
+      // const response = await axios.get(`http://localhost:3001/clientes/${clientId}`); // LOCAL
       setClientData(response.data);
       setVehicles(response.data.Vehicles || []);
     } catch (error) {
@@ -45,7 +46,8 @@ const Profile = () => {
 
   const handleDeleteVehicle = async (vehicleId) => {
     try {
-      await axios.delete(`http://localhost:3001/vehiculo/${vehicleId}`);
+      await axios.delete(`https://proyectofi-production.up.railway.app/vehiculo/${vehicleId}`); // PRODUCCION
+      // await axios.delete(`http://localhost:3001/vehiculo/${vehicleId}`); // LOCAL
       setVehicles((prevVehicles) => prevVehicles.filter((vehicle) => vehicle.id !== vehicleId));
     } catch (error) {
       console.error('Error deleting vehicle:', error);

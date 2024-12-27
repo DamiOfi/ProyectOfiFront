@@ -114,7 +114,8 @@ const FormPostVehicle = ({ clientId }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:3001/vehiculo", vehicleData);
+      const response = await axios.post("https://proyectofi-production.up.railway.app/vehiculo", vehicleData); // PRODUCTION
+      // const response = await axios.post("http://localhost:3001/vehiculo", vehicleData); LOCAL
       notiToast("success", "Vehículo agregado exitosamente");
       navigate("/");
       console.log("Vehículo guardado:", response.data);

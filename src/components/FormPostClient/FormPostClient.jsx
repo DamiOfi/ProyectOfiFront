@@ -87,7 +87,8 @@ const FormPostClient = ({ onClientCreated }) => {
 
     setIsSubmitting(true);
     try {
-      const response = await axios.post("http://localhost:3001/clientes", formData);
+      const response = await axios.post("https://proyectofi-production.up.railway.app/clientes", formData); //PRODUCCION
+      //const response = await axios.post("http://localhost:3001/clientes", formData); LOCAL
       notiToast("success", "Cliente agregado exitosamente");
       onClientCreated(response.data.cliente.id);
     } catch (error) {
